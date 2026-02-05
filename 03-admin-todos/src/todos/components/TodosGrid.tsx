@@ -4,8 +4,9 @@ import { Todo } from "@/src/generated/prisma/client";
 import { TodosItems } from "./TodosItems";
 
 
-import * as api from "@/src/todos/helpers/todos";
-import { useRouter } from "next/navigation";
+/* import * as api from "@/src/todos/helpers/todos"; */
+/* import { useRouter } from "next/navigation"; */
+import { toggleTodo } from "../actions/todo-actions";
 
 interface TodosGridProps {
     todos: Todo[];
@@ -15,13 +16,15 @@ interface TodosGridProps {
 
 export const TodosGrid = ({ todos = [] }: TodosGridProps) => {
 
-    const router = useRouter();
+    /* const router = useRouter(); */
 
 
-    const toggleTodo = async (id: string, complete: boolean) => {
+/*     const toggleTodo = async (id: string, complete: boolean) => {
         await api.updateTodo(id, complete);
         router.refresh();
-    }
+    } */
+
+
 
 
     return (

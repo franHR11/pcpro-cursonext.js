@@ -36,7 +36,7 @@ export const updateTodo = async (
   return response.json();
 };
 
-export const createTodo = async (description: string): Promise<Todo> => {
+/* export const createTodo = async (description: string): Promise<Todo> => {
   const body = {
     description,
   };
@@ -52,7 +52,7 @@ export const createTodo = async (description: string): Promise<Todo> => {
   }
 
   return response.json();
-};
+}; */
 
 export const deleteTodo = async (): Promise<Todo> => {
   const response = await fetch(`/api/todos`, {

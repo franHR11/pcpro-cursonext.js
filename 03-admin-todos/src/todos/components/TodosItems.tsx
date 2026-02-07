@@ -1,6 +1,12 @@
+"use client";
+
 import { Todo } from "@/src/generated/prisma/client";
 import { IoMdSquareOutline } from "react-icons/io";
 import { IoCheckboxOutline } from "react-icons/io5";
+
+import { startTransition, useOptimistic } from "react";
+
+
 
 interface TodosItemsProps {
     todos: Todo;
@@ -17,19 +23,45 @@ const styleTodoPending = "bg-red-50 rounded-lg shadow-sm p-5 border-dashed borde
 
 
 export const TodosItems = ({ todos, toggleTodo }: TodosItemsProps) => {
+
+
+    const [optimisticTodo, setOptimisticTodo] = useOptimistic(todos,
+        (state, newComplete: boolean) => {
+            return {
+                ...state,
+                complete: newComplete,
+            };
+        }
+    );
+
+
+    const onToggleTodo = async () => {
+
+        try {
+            startTransition(async () => {
+                setOptimisticTodo(!optimisticTodo.complete);
+                await toggleTodo(optimisticTodo.id, !optimisticTodo.complete);
+            });
+        } catch (error) {
+            setOptimisticTodo(!optimisticTodo.complete);
+        }
+    }
+
+
+
     return (
 
 
-        <div onClick={() => toggleTodo(todos.id, !todos.complete)} className={todos.complete ? styleTodoDone : styleTodoPending + " flex items-center gap-2"}>
+        <div onClick={onToggleTodo} className={optimisticTodo.complete ? styleTodoDone : styleTodoPending + " flex items-center gap-2"}>
 
-            {todos.complete ? (
+            {optimisticTodo.complete ? (
                 <IoCheckboxOutline size={30} className="text-green-500" />
             ) : (
                 <IoMdSquareOutline size={30} className="text-blue-500" />
             )}
 
-            <h3 className="text-lg font-bold">{todos.description}</h3>
-            <p className="text-sm text-gray-500">{todos.createdAt.toLocaleDateString()}</p>
+            <h3 className="text-lg font-bold">{optimisticTodo.description}</h3>
+            <p className="text-sm text-gray-500">{optimisticTodo.createdAt.toLocaleDateString()}</p>
 
         </div>
 

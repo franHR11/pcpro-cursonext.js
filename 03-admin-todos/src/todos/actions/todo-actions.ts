@@ -4,6 +4,8 @@ import { Todo } from "@/src/generated/prisma/client";
 import { prisma } from "@/src/lib/prisma";
 import { revalidatePath } from "next/cache";
 
+export const sleep = async (ms: number = 0) => new Promise(resolve => setTimeout(resolve, ms * 1000));
+
 
 
 export const toggleTodo = async (id: string, complete: boolean): Promise<{
@@ -12,6 +14,8 @@ export const toggleTodo = async (id: string, complete: boolean): Promise<{
     updatedTodo?: Todo;
 }> => {
 
+
+    await sleep(2);
     const todo = await prisma.todo.findUnique({
         where: {
             id,
